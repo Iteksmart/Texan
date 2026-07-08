@@ -8,7 +8,7 @@
 export type ConnectorMode = 'api' | 'webhook';
 
 export interface CredentialField {
-  key: 'accessToken' | 'apiKey' | 'instanceUrl' | 'baseUrl';
+  key: 'accessToken' | 'apiKey' | 'instanceUrl' | 'baseUrl' | 'realmId' | 'clientId' | 'clientSecret';
   label: string;
   placeholder?: string;
   secret?: boolean;
@@ -32,6 +32,20 @@ export interface ProviderMeta {
 }
 
 export const PROVIDERS: ProviderMeta[] = [
+  {
+    key: 'QUICKBOOKS',
+    label: 'QuickBooks Online',
+    vendor: 'Intuit QuickBooks',
+    modes: ['webhook'],
+    authNote: 'QuickBooks Online OAuth connection. Add the company ID/realm ID and OAuth app details, then use the generated connector record to track billing export setup.',
+    docsUrl: 'https://developer.intuit.com/app/developer/qbo/docs/get-started',
+    credentialFields: [
+      { key: 'realmId', label: 'Company ID / Realm ID', placeholder: '1234567890' },
+      { key: 'clientId', label: 'OAuth client ID', secret: true },
+      { key: 'clientSecret', label: 'OAuth client secret', secret: true },
+      { key: 'accessToken', label: 'OAuth access token', secret: true },
+    ],
+  },
   {
     key: 'CLIO',
     label: 'Clio Manage',

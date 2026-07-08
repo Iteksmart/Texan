@@ -17,13 +17,17 @@ export function ConnectorForm({
   tenants,
   needsTenant,
   action,
+  initialProvider,
 }: {
   providers: ProviderOption[];
   tenants: { id: string; name: string }[];
   needsTenant: boolean;
   action: (formData: FormData) => void;
+  initialProvider?: string;
 }) {
-  const [providerKey, setProviderKey] = useState(providers[0]?.key ?? '');
+  const [providerKey, setProviderKey] = useState(
+    providers.some((p) => p.key === initialProvider) ? initialProvider! : providers[0]?.key ?? '',
+  );
   const provider = providers.find((p) => p.key === providerKey);
 
   return (

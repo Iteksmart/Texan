@@ -1,5 +1,6 @@
+import Link from 'next/link';
 import { requireSession } from '@/lib/auth';
-import { canViewBilling, canViewRevenueForecast, requirePermission, isPlatform } from '@/lib/rbac';
+import { canManageConnectors, canViewBilling, canViewRevenueForecast, requirePermission, isPlatform } from '@/lib/rbac';
 import { loadCases } from '@/lib/case-queries';
 import { db } from '@/lib/db';
 import { fmtMoney } from '@/lib/metrics';
@@ -12,6 +13,7 @@ export default async function BillingPage() {
   const session = await requireSession();
   requirePermission(session, canViewBilling(session));
   const showRevenueForecast = canViewRevenueForecast(session);
+  const canConnectQuickBooks = canManageConnectors(session);
 
   const scored = await loadCases(session, { includeClosed: false });
   const tenants = await db.tenant.findMany({
@@ -55,7 +57,13 @@ export default async function BillingPage() {
         </div>
         <div className="connector-meta">
           <span className="badge badge-blue"><span className="dot" /> Available</span>
-          <button className="btn small" type="button">Connect QuickBooks</button>
+          {canConnectQuickBooks ? (
+            <Link className="btn small" href="/app/admin/connectors?provider=QUICKBOOKS">
+              Connect QuickBooks
+            </Link>
+          ) : (
+            <span className="muted small">Ask a Super Admin or Firm Admin to connect QuickBooks.</span>
+          )}
         </div>
       </div>
 

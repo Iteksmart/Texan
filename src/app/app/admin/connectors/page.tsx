@@ -19,7 +19,7 @@ function statusBadge(status: string) {
   );
 }
 
-export default async function ConnectorsPage() {
+export default async function ConnectorsPage({ searchParams }: { searchParams?: { provider?: string } }) {
   const session = await requireSession();
   requirePermission(session, canManageConnectors(session));
   const platform = isPlatform(session);
@@ -116,6 +116,7 @@ export default async function ConnectorsPage() {
         tenants={tenants.map((t) => ({ id: t.id, name: t.name }))}
         needsTenant={platform}
         action={createConnectorAction}
+        initialProvider={searchParams?.provider}
       />
 
       <div className="card">
