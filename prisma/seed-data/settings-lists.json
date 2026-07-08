@@ -1,0 +1,80 @@
+{
+ "Stage": [
+  "Intake",
+  "Investigation",
+  "Records",
+  "Treatment",
+  "Claims",
+  "Demand Prep",
+  "Attorney Review",
+  "Negotiation",
+  "Lien Resolution",
+  "Disbursement",
+  "Closed"
+ ],
+ "Status": [
+  "New",
+  "In Progress",
+  "Waiting on Client",
+  "Waiting on 1P",
+  "Waiting on 3P",
+  "Waiting on Subro",
+  "Waiting on Attorney",
+  "Complete",
+  "Escalated",
+  "Closed",
+  "Waiting on Provider"
+ ],
+ "Priority": [
+  "Low",
+  "Normal",
+  "High",
+  "Critical"
+ ],
+ "Health": [],
+ "Service Line": [],
+ "Role": [],
+ "Client": [
+  "Carlson Law Firm",
+  "McMinn PI Lawyers",
+  "FVF Law",
+  "Demo Law Group",
+  "Sewell Law Firm"
+ ],
+ "Case Manager": [
+  "Richelle Bauman",
+  "Jacqueline Maldonado",
+  "Eduardo Maldonado",
+  "Robert Albasini",
+  "Open Seat",
+  "Jacqueline",
+  "Annette",
+  "Rafael",
+  "Oscar"
+ ],
+ "Yes/No Tracking": [
+  "Yes",
+  "No",
+  "Pending",
+  "N/A"
+ ],
+ "State": [
+  "TX",
+  "CA",
+  "FL",
+  "GA",
+  "VA",
+  "MD",
+  "DC",
+  "CO",
+  "AZ",
+  "AL",
+  "AR",
+  "OK",
+  "LA",
+  "NC",
+  "SC",
+  "TN",
+  "Other"
+ ]
+}

@@ -1,0 +1,20 @@
+node_modules/
+.next/
+out/
+dist/
+*.tsbuildinfo
+next-env.d.ts
+
+# database
+prisma/*.db
+prisma/*.db-journal
+
+# env - never commit real secrets
+.env
+.env.local
+.env.production
+
+# misc
+.DS_Store
+npm-debug.log*
+dev-server.log

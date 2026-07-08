@@ -1,0 +1,199 @@
+// NextUS CSM - multi-tenant case management for injury law firms.
+// Every case-data model carries tenantId; application code must always
+// scope queries through lib/rbac.ts helpers (never query cases raw).
+//
+// Dev uses SQLite. For production/HIPAA switch provider to "postgresql"
+// (models use plain String instead of enums so both providers work).
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Tenant {
+  id           String   @id @default(cuid())
+  name         String
+  slug         String   @unique
+  contactName  String?
+  contactEmail String?
+  phone        String?
+  state        String?
+  // ACTIVE | ONBOARDING | SUSPENDED
+  status       String   @default("ACTIVE")
+  // flat monthly fee per active case used by the billing summary
+  perCaseRate  Float    @default(250)
+  notes        String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  users      User[]
+  cases      Case[]
+  connectors Connector[]
+}
+
+// Per-tenant integration with an external case-management system
+// (Clio, CASEpeer, Litify, Filevine, ...). Credentials are stored encrypted
+// (AES-256-GCM, key derived from AUTH_SECRET); every connector also gets an
+// inbound webhook endpoint secured by webhookSecret.
+model Connector {
+  id             String    @id @default(cuid())
+  tenantId       String
+  tenant         Tenant    @relation(fields: [tenantId], references: [id])
+  // provider key from src/lib/connectors/registry.ts (CLIO, CASEPEER, ...)
+  provider       String
+  name           String
+  // CONFIGURED | ACTIVE | DISABLED | ERROR
+  status         String    @default("CONFIGURED")
+  baseUrl        String?
+  credentials    String?
+  webhookSecret  String
+  lastSyncAt     DateTime?
+  lastSyncResult String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  @@index([tenantId])
+}
+
+model User {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  name         String
+  passwordHash String
+  // SUPER_ADMIN | EXECUTIVE | FIRM_ADMIN | ATTORNEY | CASE_MANAGER | STAFF | ACCOUNTING | CLIENT_VIEWER
+  role         String
+  // null => platform-level user (sees all tenants); set => scoped to one firm
+  tenantId     String?
+  tenant       Tenant?   @relation(fields: [tenantId], references: [id])
+  title        String?
+  active       Boolean   @default(true)
+  lastLoginAt  DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  managedCases Case[] @relation("CaseManager")
+  notes        Note[]
+
+  @@index([tenantId])
+}
+
+model Case {
+  id         String @id @default(cuid())
+  caseNumber String
+  tenantId   String
+  tenant     Tenant @relation(fields: [tenantId], references: [id])
+
+  // injured client (PHI - handle per HIPAA minimum-necessary)
+  clientName  String
+  clientPhone String?
+  clientEmail String?
+
+  caseManagerId String?
+  caseManager   User?   @relation("CaseManager", fields: [caseManagerId], references: [id])
+
+  stage    String @default("Intake")
+  status   String @default("New")
+  priority String @default("Normal")
+
+  openDate          DateTime  @default(now())
+  lastActivity      DateTime  @default(now())
+  nextDue           DateTime?
+  slaDays           Int       @default(7)
+  qcScore           Float?
+  revenueForecast   Float     @default(0)
+  settlementValue   Float?
+  openIssues        Int       @default(0)
+  lienStatus        String?
+  lastClientContact DateTime?
+  dateOfIncident    DateTime?
+  solDate           DateTime?
+  state             String?
+  notes             String?
+  closedAt          DateTime?
+
+  checklist  ChecklistItem[]
+  treatments TreatmentEntry[]
+  caseNotes  Note[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([tenantId, caseNumber])
+  @@index([tenantId, stage])
+  @@index([caseManagerId])
+}
+
+// One row per checklist question per case (replaces the ~60 Yes/No columns
+// in the spreadsheet). value: Yes | No | Pending | N/A
+model ChecklistItem {
+  id        String   @id @default(cuid())
+  caseId    String
+  case      Case     @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  // INTAKE | INVESTIGATION | INSURANCE | MEDICAL | LIENS | DEMAND
+  category  String
+  key       String
+  label     String
+  value     String   @default("No")
+  critical  Boolean  @default(false)
+  sortOrder Int      @default(0)
+  updatedAt DateTime @updatedAt
+
+  @@unique([caseId, key])
+  @@index([caseId, category])
+}
+
+// "Currently Treating" tracker rows
+model TreatmentEntry {
+  id             String    @id @default(cuid())
+  caseId         String
+  case           Case      @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  provider       String
+  providerType   String
+  dosDate        DateTime?
+  billReceived   String    @default("No")
+  recordReceived String    @default("No")
+  nextApptDate   DateTime?
+  attended       String    @default("Pending")
+  mri            String    @default("N/A")
+  surgeryConsult String    @default("N/A")
+  doneTreating   Boolean   @default(false)
+  notes          String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  @@index([caseId])
+}
+
+model Note {
+  id         String   @id @default(cuid())
+  caseId     String
+  case       Case     @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  authorId   String?
+  author     User?    @relation(fields: [authorId], references: [id])
+  authorName String
+  body       String
+  createdAt  DateTime @default(now())
+
+  @@index([caseId])
+}
+
+// HIPAA audit trail: append-only record of every significant action.
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String?
+  userEmail String
+  tenantId  String?
+  action    String
+  entity    String
+  entityId  String?
+  details   String?
+  ip        String?
+  createdAt DateTime @default(now())
+
+  @@index([tenantId, createdAt])
+  @@index([userEmail, createdAt])
+}
