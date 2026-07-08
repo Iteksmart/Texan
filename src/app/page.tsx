@@ -1,14 +1,6 @@
 import Link from 'next/link';
 
-const SERVICE_AREAS = [
-  ['Intake & Client Onboarding', 'Qualification, onboarding, and file setup that keeps every new matter moving.'],
-  ['Medical Records & Bills', 'Retrieval, review, organization, and follow-up for records and billing packets.'],
-  ['Treatment Coordination', 'Treatment monitoring, appointment tracking, and client follow-up support.'],
-  ['Client Communications', 'Status updates, case progression support, and client touchpoints.'],
-  ['Investigations', 'Photos, videos, witness statements, FOIA requests, and supporting evidence.'],
-  ['Demand Preparation', 'Record compilation, demand package support, and attorney-ready handoff.'],
-  ['Settlement Support', 'Lien verification, disbursement preparation, and closing coordination.'],
-];
+const DEMO_EMAIL = 'mailto:rbauman@texancs.com?cc=jmaldonado@texancs.com&subject=Texan%20Core%20Solutions%20Demo%20Request';
 
 const VALUES = [
   ['Texan Values', 'We bring discipline, loyalty, and accountability to every file.'],
@@ -46,7 +38,7 @@ export default function MarketingPage() {
           <a href="#home">Home</a>
           <a href="#about">About Us</a>
           <a href="#services">Services</a>
-          <a href="#demo">Schedule a Demo</a>
+          <a href={DEMO_EMAIL}>Schedule a Demo</a>
           <Link href="/login">Client/Firm Portal</Link>
         </div>
       </nav>
@@ -64,12 +56,12 @@ export default function MarketingPage() {
             operational bottlenecks.
           </p>
           <div className="texan-cta-row">
-            <a className="btn" href="#demo">Schedule a Consultation</a>
-            <a className="btn secondary" href="#services">Our Services</a>
+            <a className="btn" href={DEMO_EMAIL}>Schedule a Consultation</a>
+            <Link className="btn secondary" href="/login">Open Demo Portal</Link>
           </div>
         </div>
         <div className="texan-hero-art" aria-label="Nationwide Texan Core Solutions support">
-          <img className="texan-hero-map-img" src="/texan-assets/hero-us-map-houston.png" alt="United States support map with Texan Core Solutions mark over Houston skyline" />
+          <img className="texan-hero-map-img" src="/texan-assets/hero-us-map-houston-client.png" alt="United States support map with Texan Core Solutions mark over Houston skyline" />
         </div>
       </section>
 
@@ -87,18 +79,8 @@ export default function MarketingPage() {
         <img src="/texan-assets/stats-strip.png" alt="We support PI law firms across the nation. 10 plus years experience, 500 plus firms supported, 100 percent PI focused support, nationwide." />
       </section>
 
-      <section className="texan-section" id="services">
-        <p className="eyebrow">What We Do</p>
-        <h2>Pre-Litigation & Legal Operations Support</h2>
-        <div className="texan-service-grid">
-          {SERVICE_AREAS.map(([title, body]) => (
-            <article key={title}>
-              <div className="texan-line-icon" />
-              <h3>{title}</h3>
-              <p>{body}</p>
-            </article>
-          ))}
-        </div>
+      <section className="texan-image-strip texan-services-image" id="services" aria-label="Pre-litigation and legal operations support services">
+        <img src="/texan-assets/services-strip.png" alt="What we do: pre-litigation and legal operations support services." />
       </section>
 
       <section className="texan-values-live" aria-label="Texan Core Values">
@@ -118,23 +100,6 @@ export default function MarketingPage() {
         <img src="/texan-assets/cofounders-strip.png" alt="Meet your co-founders: Richelle Bauman and Jacqueline Maldonado." />
       </section>
 
-      <section className="texan-demo" id="demo">
-        <div>
-          <p className="eyebrow">Schedule a Demo</p>
-          <h2>Walk firms through real-time case activity</h2>
-          <p>
-            Use this secure activity view during demos and client check-ins to show case pipelines,
-            file health, reports, billing status, and operational progress.
-          </p>
-        </div>
-        <div className="texan-demo-actions">
-          <Link className="btn" href="/login">Open Activity Walkthrough</Link>
-          <a className="btn secondary" href="mailto:rbauman@texancs.com,jmaldonado@texancs.com?subject=Texan%20Core%20Solutions%20Demo%20Request">
-            Email Demo Request
-          </a>
-        </div>
-      </section>
-
       <footer className="texan-footer">
         <div>
           <b>Texan Core Solutions</b>
@@ -144,7 +109,7 @@ export default function MarketingPage() {
           <a href="#home">Home</a>
           <a href="#about">About Us</a>
           <a href="#services">Services</a>
-          <a href="#demo">Schedule a Demo</a>
+          <a href={DEMO_EMAIL}>Schedule a Demo</a>
           <Link href="/login">Client/Firm Portal</Link>
         </nav>
       </footer>

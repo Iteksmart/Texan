@@ -656,6 +656,12 @@ html.dark .feature { backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(
 .texan-stats-image {
   background: #061536;
 }
+.texan-services-image {
+  background: #fff;
+}
+.texan-services-image img {
+  width: 100%;
+}
 .texan-section {
   padding: 46px 4vw 54px;
   background: #fff;
@@ -1140,6 +1146,13 @@ html.dark .feature { backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(
     transform: none;
   }
   .texan-stats-image img { object-position: 43% center; }
+  .texan-services-image img {
+    min-width: 920px;
+    height: 220px;
+    object-fit: contain;
+    object-position: left center;
+    background: #fff;
+  }
   .texan-values-band img { object-position: 42% center; }
   .texan-founders img {
     min-width: 980px;
@@ -1232,6 +1245,10 @@ html.dark .feature { backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(
     height: 150px;
   }
   .texan-stats-image img { object-position: 45% center; }
+  .texan-services-image img {
+    min-width: 880px;
+    height: 210px;
+  }
   .texan-values-band img { object-position: 38% center; }
   .texan-founders img {
     min-width: 900px;
