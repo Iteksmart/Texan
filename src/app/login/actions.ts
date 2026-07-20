@@ -3,7 +3,7 @@
 import { redirect } from 'next/navigation';
 import { authenticate, createSession, clearSession, getSession } from '@/lib/auth';
 import { audit } from '@/lib/audit';
-import { isRedirectError } from './redirect';
+import isRedirectError from './redirect';
 
 function toSafeError(error: unknown) {
   if (error instanceof Error) return error.message;
