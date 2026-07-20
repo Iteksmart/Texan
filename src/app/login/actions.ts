@@ -3,6 +3,7 @@
 import { redirect } from 'next/navigation';
 import { authenticate, createSession, clearSession, getSession } from '@/lib/auth';
 import { audit } from '@/lib/audit';
+import { isRedirectError } from './redirect';
 
 function toSafeError(error: unknown) {
   if (error instanceof Error) return error.message;
@@ -27,6 +28,9 @@ export async function loginAction(_prev: { error?: string } | undefined, formDat
     await audit(session, 'LOGIN', 'User', session.userId);
     redirect('/app/dashboard');
   } catch (error) {
+    if (isRedirectError(error)) {
+      throw error;
+    }
     console.error('loginAction failed', error);
     await audit(null, 'LOGIN_FAILED', 'User', null, { email, error: toSafeError(error) });
     return { error: 'The sign-in service is temporarily unavailable. Please try again.' };
