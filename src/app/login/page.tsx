@@ -11,7 +11,7 @@ export default function LoginPage() {
         <div className="sub">Sign in to your secure firm portal</div>
         <LoginForm />
         <div className="demo-creds">
-          <Link href="/">Back to United Legal Support Services</Link>
+          <Link href="https://www.united-lss.com">Back to United Legal Support Services</Link>
         </div>
       </div>
     </div>
