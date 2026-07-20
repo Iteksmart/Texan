@@ -1,19 +1,11 @@
 'use client';
 
-import { useFormState, useFormStatus } from 'react-dom';
+import { useFormState } from 'react-dom';
 import { loginAction } from './actions';
-
-function SubmitButton() {
-  const { pending } = useFormStatus();
-  return (
-    <button className="btn" type="submit" disabled={pending} style={{ width: '100%', marginTop: 6 }}>
-      {pending ? 'Signing in…' : 'Sign in'}
-    </button>
-  );
-}
 
 export function LoginForm() {
   const [state, formAction] = useFormState(loginAction, undefined);
+
   return (
     <form action={formAction}>
       {state?.error ? <div className="error-box">{state.error}</div> : null}
@@ -25,7 +17,9 @@ export function LoginForm() {
         Password
         <input name="password" type="password" autoComplete="current-password" required />
       </label>
-      <SubmitButton />
+      <button className="btn" type="submit" style={{ width: '100%', marginTop: 6 }}>
+        Sign in
+      </button>
     </form>
   );
 }
