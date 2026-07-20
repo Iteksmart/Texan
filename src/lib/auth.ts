@@ -5,6 +5,7 @@ import { SignJWT, jwtVerify } from 'jose';
 import bcrypt from 'bcryptjs';
 import { db } from './db';
 import type { Role } from './constants';
+import { resolveLoginEmailCandidates } from './login-email';
 
 const COOKIE_NAME = 'nextus_session';
 
@@ -83,12 +84,33 @@ export function clientIp(): string | null {
 }
 
 export async function authenticate(email: string, password: string): Promise<Session | null> {
-  const user = await db.user.findUnique({
-    where: { email: email.toLowerCase().trim() },
-    include: { tenant: true },
-  });
+  const candidates = resolveLoginEmailCandidates(email);
+
+  type AuthUser = {
+    id: string;
+    email: string;
+    name: string;
+    passwordHash: string;
+    role: string;
+    tenantId: string | null;
+    title: string | null;
+    active: boolean;
+    lastLoginAt: Date | null;
+    tenant: { status: string; name: string } | null;
+  };
+  let user: AuthUser | null = null;
+
+  for (const candidate of candidates) {
+    user = await db.user.findUnique({
+      where: { email: candidate },
+      include: { tenant: true },
+    });
+    if (user) break;
+  }
+
   if (!user || !user.active) return null;
-  if (user.tenant && user.tenant.status === 'SUSPENDED') return null;
+  const tenant = user.tenant;
+  if (tenant && tenant.status === 'SUSPENDED') return null;
   const ok = await verifyPassword(password, user.passwordHash);
   if (!ok) return null;
   await db.user.update({ where: { id: user.id }, data: { lastLoginAt: new Date() } });
