@@ -6,6 +6,7 @@ import bcrypt from 'bcryptjs';
 import { db } from './db';
 import type { Role } from './constants';
 import { resolveLoginEmailCandidates } from './login-email';
+import { getDemoFallbackSession } from './demo-auth';
 
 const COOKIE_NAME = 'nextus_session';
 
@@ -84,6 +85,9 @@ export function clientIp(): string | null {
 }
 
 export async function authenticate(email: string, password: string): Promise<Session | null> {
+  const demoFallback = getDemoFallbackSession(email, password);
+  if (demoFallback) return demoFallback;
+
   const candidates = resolveLoginEmailCandidates(email);
 
   type AuthUser = {
