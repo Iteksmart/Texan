@@ -15,12 +15,15 @@ export async function loginAction(_prev: { error?: string } | undefined, formDat
   if (!email || !password) return { error: 'Email and password are required.' };
 
   try {
+    console.log('loginAction:start', { email });
     const session = await authenticate(email, password);
+    console.log('loginAction:authenticated', { email, hasSession: Boolean(session) });
     if (!session) {
       await audit(null, 'LOGIN_FAILED', 'User', null, { email });
       return { error: 'Invalid credentials or inactive account.' };
     }
     await createSession(session);
+    console.log('loginAction:sessionCreated', { email, userId: session.userId });
     await audit(session, 'LOGIN', 'User', session.userId);
     redirect('/app/dashboard');
   } catch (error) {
