@@ -7,11 +7,16 @@ const globalForPrisma = globalThis as unknown as {
   sqliteDemoState?: 'idle' | 'ensuring';
 };
 
-export const db = globalForPrisma.prisma ?? new PrismaClient();
+// When no DATABASE_URL is configured (e.g. a fresh Vercel project), fall back
+// to a self-seeding demo database on the only writable serverless path (/tmp).
+// Real deployments override this with a managed database connection string.
+const databaseUrl = process.env.DATABASE_URL || 'file:/tmp/nextus-demo.db';
+
+export const db = globalForPrisma.prisma ?? new PrismaClient({ datasourceUrl: databaseUrl });
 
 if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = db;
 
-if ((process.env.DATABASE_URL ?? '').startsWith('file:')) {
+if (databaseUrl.startsWith('file:')) {
   globalForPrisma.sqliteDemoState ??= 'idle';
 
   db.$use(async (params, next) => {
