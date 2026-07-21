@@ -1,14 +1,30 @@
 'use client';
 
-import { useFormState } from 'react-dom';
-import { loginAction } from './actions';
+import { useState } from 'react';
 
 export function LoginForm() {
-  const [state, formAction] = useFormState(loginAction, undefined);
+  const [error, setError] = useState<string | null>(null);
+
+  async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const response = await fetch('/api/login', {
+      method: 'POST',
+      body: formData,
+    });
+
+    if (response.redirected) {
+      window.location.assign(response.url);
+      return;
+    }
+
+    const payload = await response.json().catch(() => ({}));
+    setError(payload.error ?? 'The sign-in service is temporarily unavailable. Please try again.');
+  }
 
   return (
-    <form action={formAction}>
-      {state?.error ? <div className="error-box">{state.error}</div> : null}
+    <form onSubmit={onSubmit}>
+      {error ? <div className="error-box">{error}</div> : null}
       <label className="field">
         Email
         <input name="email" type="email" autoComplete="username" required autoFocus />
