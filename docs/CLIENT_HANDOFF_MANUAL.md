@@ -96,6 +96,12 @@ In Vercel:
 | `AUTH_SECRET` | Yes | Long random secret | Generate a unique production value |
 | `SESSION_IDLE_MINUTES` | Recommended | `30` | Keep at or below 30 for PHI-minded environments |
 
+Demo-only shortcut: if you are not ready to attach PostgreSQL yet, set
+`DATABASE_URL` to `file:/tmp/nextus-demo.db`. The app then creates and seeds a
+temporary demo database (demo logins, password `Demo123!`) automatically on
+first request. The data is ephemeral — it resets whenever Vercel recycles the
+serverless instance — so never use this mode for real client data.
+
 Generate `AUTH_SECRET` with one of these:
 
 ```bash
@@ -114,9 +120,7 @@ node -e "console.log(require('crypto').randomBytes(48).toString('base64'))"
 2. Wait for the build to finish.
 3. Open the generated `https://project-name.vercel.app` URL.
 4. Test:
-   - Public homepage loads.
-   - **Schedule a Demo** link works.
-   - **Client/Firm Portal** opens `/login`.
+   - The root URL redirects to `/login`.
    - A real admin can sign in.
    - Dashboard, cases, reports, billing, and admin areas load based on role.
 
