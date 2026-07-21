@@ -92,15 +92,15 @@ In Vercel:
 
 | Variable | Required | Example | Notes |
 |---|---:|---|---|
-| `DATABASE_URL` | Yes | `postgresql://user:password@host/db?sslmode=require` | Managed PostgreSQL connection string |
+| `DATABASE_URL` | For production | `postgresql://user:password@host/db?sslmode=require` | Managed PostgreSQL connection string. Optional for demos: when unset, the app automatically uses a temporary self-seeding demo database |
 | `AUTH_SECRET` | Yes | Long random secret | Generate a unique production value |
 | `SESSION_IDLE_MINUTES` | Recommended | `30` | Keep at or below 30 for PHI-minded environments |
 
-Demo-only shortcut: if you are not ready to attach PostgreSQL yet, set
-`DATABASE_URL` to `file:/tmp/nextus-demo.db`. The app then creates and seeds a
-temporary demo database (demo logins, password `Demo123!`) automatically on
-first request. The data is ephemeral — it resets whenever Vercel recycles the
-serverless instance — so never use this mode for real client data.
+Demo-only shortcut: if `DATABASE_URL` is not set at all, the app automatically
+creates and seeds a temporary demo database (demo logins, password `Demo123!`)
+on first request — so a fresh Vercel import works with zero configuration. The
+data is ephemeral — it resets whenever Vercel recycles the serverless
+instance — so never use this mode for real client data.
 
 Generate `AUTH_SECRET` with one of these:
 
