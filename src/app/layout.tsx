@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Texan Core Solutions | TEXANCS Portal',
+  title: 'United Legal Support Services Portal',
   description:
     'Pre-litigation operations support and secure firm activity portal for personal injury law firms.',
 };

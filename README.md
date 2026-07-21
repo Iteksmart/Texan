@@ -12,6 +12,9 @@ into its own portal and sees only its own data.
 Built with Next.js 14 (App Router), TypeScript, and Prisma. Styled with the iTechSmart
 purple-neon theme, with full **light and dark modes**.
 
+The web portal is branded **United Legal Support Services**. The root URL routes straight
+to the secure sign-in page (the former public marketing website has been removed).
+
 ## What it replaces
 
 | Spreadsheet tab | In the app |
@@ -79,7 +82,7 @@ Demo logins (password `Demo123!`):
 | `docs/TENANT_ONBOARDING.md` | 5-minute quick guide to onboard a new law firm |
 | `docs/WALKTHROUGH.md` | Hands-on guided tour with the demo data |
 | `docs/CONNECTORS.md` | Data connectors: Clio, CASEpeer, Litify, webhooks |
-| `docs/TEXAN_CLIENT_HANDOFF_MANUAL.md` | Client handoff manual: Vercel deploy, Squarespace DNS, platform instructions |
+| `docs/CLIENT_HANDOFF_MANUAL.md` | Client handoff manual: Vercel deploy, Squarespace DNS, platform instructions |
 | `HIPAA.md` | Security posture and go-live compliance checklist |
 
 ## Production notes

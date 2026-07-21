@@ -1,9 +1,9 @@
-# Texan Core Solutions Platform Handoff Manual
+# United Legal Support Services Platform Handoff Manual
 
 Prepared by: iTechSmart Inc.  
 Last updated: July 7, 2026
 
-This manual explains how to deploy the Texan Core Solutions website and portal to Vercel, point a Squarespace-managed domain to the Vercel deployment, and operate the platform after launch.
+This manual explains how to deploy the United Legal Support Services portal to Vercel, point a Squarespace-managed domain to the Vercel deployment, and operate the platform after launch.
 
 Important: do not use demo data, SQLite, or shared demo accounts for production. Production should use a managed PostgreSQL database, a strong `AUTH_SECRET`, HTTPS, least-privilege user roles, and signed BAAs where real PHI will be stored.
 
@@ -11,12 +11,11 @@ Important: do not use demo data, SQLite, or shared demo accounts for production.
 
 ## 1. Go-Live Overview
 
-The finished platform has two public-facing pieces:
+The platform is the secure sign-in portal (the former public marketing website has been retired; the root URL redirects to the sign-in page):
 
 | Area | URL after launch | Purpose |
 |---|---|---|
-| Public website | `https://yourdomain.com` | Texan Core Solutions marketing website with Home, About Us, Services, Schedule a Demo, and Client/Firm Portal tabs |
-| Client/Firm Portal | `https://yourdomain.com/login` | Secure sign-in for Texan staff, admins, law firm users, and client/firm portal users |
+| Client/Firm Portal | `https://yourdomain.com/login` (root URL redirects here) | Secure sign-in for United Legal Support Services staff, admins, law firm users, and client/firm portal users |
 
 Recommended launch flow:
 
@@ -149,16 +148,16 @@ In Vercel:
 2. Go to **Settings** then **Domains**.
 3. Click **Add Domain**.
 4. Add the preferred domain, for example:
-   - `texancoresolutions.com`
-   - `www.texancoresolutions.com`
+   - `unitedlegalsupportservices.com`
+   - `www.unitedlegalsupportservices.com`
 5. Follow the DNS instructions Vercel displays for that exact domain.
 
 Vercel normally asks for:
 
 | Domain type | DNS record |
 |---|---|
-| Apex/root domain, such as `texancoresolutions.com` | `A` record pointing to Vercel |
-| `www` subdomain, such as `www.texancoresolutions.com` | `CNAME` record pointing to Vercel |
+| Apex/root domain, such as `unitedlegalsupportservices.com` | `A` record pointing to Vercel |
+| `www` subdomain, such as `www.unitedlegalsupportservices.com` | `CNAME` record pointing to Vercel |
 
 Use the exact values Vercel shows in the project. If Vercel asks for a verification TXT record, add that in Squarespace too.
 
@@ -226,17 +225,10 @@ After DNS is updated:
 
 ## 4. Platform Branding and Navigation
 
-Public website tabs:
-
-- **Home**
-- **About Us**
-- **Services**
-- **Schedule a Demo**
-- **Client/Firm Portal**
-
 Portal branding:
 
-- The authenticated portal is branded for **Texan Core Solutions**.
+- The public marketing website has been removed; visiting the root URL redirects to the sign-in portal.
+- The sign-in page and authenticated portal are branded for **United Legal Support Services**.
 - The creator credit must remain visible as: **Created By: iTechSmart Inc.**
 - Product naming such as NextUS/NextUp should not be shown as the top portal brand for the client-facing dashboard.
 
@@ -246,9 +238,9 @@ Portal branding:
 
 | Role | Intended user | Access |
 |---|---|---|
-| `SUPER_ADMIN` | iTechSmart or Texan platform owner | Full platform, tenants, users, audit, import, connectors |
-| `EXECUTIVE` | Texan executive/admin leader | Executive dashboard, reports, billing, audit visibility |
-| `CASE_MANAGER` | Texan operations staff | Case work across assigned firm files |
+| `SUPER_ADMIN` | iTechSmart or United Legal Support Services platform owner | Full platform, tenants, users, audit, import, connectors |
+| `EXECUTIVE` | United Legal Support Services executive/admin leader | Executive dashboard, reports, billing, audit visibility |
+| `CASE_MANAGER` | United Legal Support Services operations staff | Case work across assigned firm files |
 | `ACCOUNTING` | Billing/accounting user | Billing and reports |
 | `FIRM_ADMIN` | Law firm admin | Their firm's portal, users, cases, and reports |
 | `ATTORNEY` | Law firm attorney | Their firm's cases and related work |
@@ -378,21 +370,19 @@ Admin users can access:
 
 ## 7. Law Firm Demo Link Workflow
 
-The website includes a **Schedule a Demo** pathway for law firms.
-
 Recommended demo process:
 
-1. A law firm clicks **Schedule a Demo** from the public website.
-2. Texan receives the inquiry using the selected scheduling/contact workflow.
-3. Texan schedules a guided walkthrough.
-4. Texan or iTechSmart creates a demo tenant or demo-safe account.
+1. A law firm requests a demo through your sales/contact workflow.
+2. United Legal Support Services receives the inquiry.
+3. United Legal Support Services schedules a guided walkthrough.
+4. United Legal Support Services or iTechSmart creates a demo tenant or demo-safe account.
 5. The law firm receives the demo link:
 
 ```text
 https://yourdomain.com/login
 ```
 
-Do not provide production credentials in public website text. Demo credentials should be shared privately and changed or removed after the demo.
+Do not provide production credentials in any public-facing text. Demo credentials should be shared privately and changed or removed after the demo.
 
 ---
 
@@ -503,16 +493,14 @@ If a deployment causes issues:
 
 Use this list before announcing the site:
 
-- Public homepage matches Texan branding.
-- Top navigation shows Home, About Us, Services, Schedule a Demo, Client/Firm Portal.
-- Header image and website sections display clearly on desktop and mobile.
+- Root URL redirects to the sign-in portal.
 - `/login` works.
 - Dashboard loads for admin.
 - Employee/staff users do not see Revenue Forecast.
 - Admin users can see Revenue Forecast where intended.
 - Dashboard chart view options work.
 - Billing includes QuickBooks connector card.
-- Portal top branding says Texan Core Solutions.
+- Sign-in page and portal top branding say United Legal Support Services.
 - Sidebar credit says Created By: iTechSmart Inc.
 - Squarespace DNS points to Vercel.
 - Root and `www` domains load over HTTPS.

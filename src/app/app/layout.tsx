@@ -15,15 +15,14 @@ export default async function AppLayout({ children }: { children: React.ReactNod
     <div className="shell">
       <aside className="sidebar">
         <div className="portal-brand">
-          <span className="portal-mark">TCS</span>
+          <span className="portal-mark">ULS</span>
           <span>
-            <b>Texan</b>
-            <small>Core Solutions</small>
+            <b>United Legal</b>
+            <small>Support Services</small>
           </span>
         </div>
 
         <div className="section">Overview</div>
-        <Link href="/">Texan Website</Link>
         <Link href="/app/dashboard">Dashboard</Link>
         {platform ? <Link href="/app/firms">Firm Portals</Link> : null}
         {platform ? <Link href="/app/team">Team Workload</Link> : null}
