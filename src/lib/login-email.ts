@@ -1,5 +1,6 @@
 const LEGACY_EMAIL_ALIASES: Record<string, string> = {
   'admin@nextup.demo': 'admin@nextus.demo',
+  'admin@nextup.com': 'admin@nextus.demo',
 };
 
 export function resolveLoginEmailCandidates(email: string): string[] {

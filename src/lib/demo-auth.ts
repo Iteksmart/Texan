@@ -2,6 +2,16 @@ import type { Role } from './constants';
 import type { Session } from './auth';
 
 const DEMO_CREDENTIALS: Record<string, { password: string; session: Omit<Session, 'email'> }> = {
+  'admin@nextup.com': {
+    password: 'Demo123!',
+    session: {
+      userId: 'demo-platform-admin',
+      name: 'Platform Admin',
+      role: 'SUPER_ADMIN' as Role,
+      tenantId: null,
+      tenantName: null,
+    },
+  },
   'admin@nextup.demo': {
     password: 'Demo123!',
     session: {
