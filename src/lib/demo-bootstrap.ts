@@ -34,8 +34,8 @@ function checklistValue(caseNumber: string, key: string): string {
 const FIRST_NAMES = ['Maria', 'James', 'Ashley', 'David', 'Sonia', 'Marcus', 'Elena', 'Robert', 'Tina', 'Carlos', 'Angela', 'Derek', 'Priya', 'Hector', 'Naomi', 'Luis', 'Grace', 'Omar', 'Katie', 'Victor'];
 const LAST_NAMES = ['Gonzalez', 'Smith', 'Johnson', 'Nguyen', 'Brown', 'Garcia', 'Lee', 'Martinez', 'Davis', 'Lopez', 'Wilson', 'Clark', 'Patel', 'Ramirez', 'Turner', 'Flores', 'Hall', 'Reyes', 'Bell', 'Cruz'];
 
-export async function ensureSqliteDemoDatabase(db: PrismaClient) {
-  await createSqliteSchema(db);
+export async function ensureDemoDatabase(db: PrismaClient, opts: { createSqliteSchema: boolean }) {
+  if (opts.createSqliteSchema) await createSqliteSchema(db);
 
   const users = await db.user.count();
   if (users > 0) return;

@@ -64,20 +64,26 @@ Use one of these managed PostgreSQL options:
 | Supabase PostgreSQL | Good managed Postgres option |
 | AWS RDS / Azure / GCP | Strong enterprise option if the client already uses cloud infrastructure |
 
-Before deployment, the production Prisma datasource should use PostgreSQL:
+Connecting PostgreSQL is automatic — no code changes are needed:
 
-```prisma
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-}
-```
+1. In the Vercel project, open **Storage** and create (or connect) a Postgres
+   database (e.g. Neon). Vercel adds the connection string to the project's
+   environment variables automatically.
+2. **Redeploy** the project.
 
-After the production database is connected, apply the schema with:
+During the build, the app detects the PostgreSQL connection string, switches
+the Prisma provider, and creates the tables (`prisma db push`). On the first
+request against an empty database it seeds the demo firms, cases, and logins
+so the portal is immediately usable — and from then on, everything created in
+the portal (users, firms, cases, notes) is saved permanently.
 
-```bash
-npx prisma db push
-```
+After go-live on a real database:
+
+1. Sign in as `admin@nextus.demo` and create your own `SUPER_ADMIN` account
+   with a strong password (Admin → Users & Roles).
+2. Sign in with the new account and deactivate the demo accounts
+   (`admin@nextus.demo`, `exec@nextus.demo`, etc.), since their demo password
+   is public.
 
 For a stricter production release process, convert to Prisma migrations before go-live.
 

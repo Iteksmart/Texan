@@ -87,8 +87,10 @@ Demo logins (password `Demo123!`):
 
 ## Production notes
 
-- Switch `prisma/schema.prisma` datasource to `postgresql` and set `DATABASE_URL`
-  (models avoid SQLite-only features on purpose).
+- Set `DATABASE_URL` to a managed PostgreSQL connection string (on Vercel: attach a
+  Postgres database via Storage). The build switches the Prisma provider and creates
+  the tables automatically; without one the app runs a self-seeding, non-persistent
+  demo database.
 - Set a strong `AUTH_SECRET` (`openssl rand -base64 48`).
 - Serve over HTTPS only; see `HIPAA.md` before handling real PHI.
 
